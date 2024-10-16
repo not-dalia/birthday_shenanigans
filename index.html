@@ -371,7 +371,6 @@
             <audio id="birthdayAudio" controls>
               <source src="./vid/happybirthday.wav" type="audio/wav">
             </audio>
-            </audio>
           </div>
         </div>
         <p id="openInstruction">Click to Commence gift unveiling procedure</p>
@@ -430,7 +429,7 @@
             document.getElementById('birthdayVideo').requestFullscreen();
             document.getElementById('birthdayVideo').play();
           }, 700);
-        } else {
+        } else if (!wasManuallyPaused) {
           document.getElementById('birthdayVideo').play();
         }
       }
@@ -455,7 +454,7 @@
 
     function createConfetti () {
       const confettiContainer = document.getElementById('confettiContainer');
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 25; i++) {
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
         confetti.style.left = Math.random() * 100 + '%';
@@ -526,6 +525,11 @@
         document.getElementById('birthdayVideo').pause();
         wasManuallyPaused = true;
       }
+    });
+
+    // when video is done, set wasManuallyPaused to true so that the video doesn't play again
+    document.getElementById('birthdayVideo').addEventListener('ended', () => {
+      wasManuallyPaused = true;
     });
 
   </script>
