@@ -1,0 +1,265 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  background-color: #0A2342;
+}
+
+body {
+  height: 100vh;
+  text-align: center;
+  padding: 40px 20px;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* Layout */
+#content {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* Initial Content */
+#initialContent {
+  background-color: #fff;
+  border-radius: 10px;
+  color: #0b0c0e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px 40px;
+  align-self: center;
+  max-width: 700px;
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+}
+
+#initialContent.hide {
+  transform: translateY(-150%);
+  opacity: 0;
+}
+
+#initialContent h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 20px;
+  font-style: italic;
+  color: black;
+}
+
+#initialContent p {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Buttons */
+button {
+  background-color: #0b0c0e;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2rem;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+button:hover {
+  background-color: blue;
+}
+
+/* Birthday Content */
+#birthdayContent {
+  display: none;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.holt-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff534;
+  position: relative;
+}
+
+#birthdayMessage {
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  z-index: 1;
+}
+
+#birthdayMessage span {
+  display: block;
+  width: fit-content;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: rotate(-5deg);
+  white-space: nowrap;
+  color: #0b0c0e;
+}
+
+#holtImage {
+  margin-top: -25%;
+  object-fit: contain;
+  z-index: 2;
+  display: block;
+}
+
+#openInstruction {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 20px;
+  background-color: blue;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+#openInstruction:hover {
+  background-color: #0b0c0e;
+}
+
+/* Card Styles */
+.card-container {
+  max-width: 640px;
+  width: 100%;
+  min-height: 300px;
+  perspective: 1000px;
+}
+
+.card {
+  width: 100%;
+  max-width: 640px;
+  position: relative;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: rotateY(5deg);
+}
+
+.card:hover #openInstruction {
+  background-color: #0b0c0e;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card.is-flipped:hover {
+  transform: rotateY(175deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: fit-content;
+  min-height: 300px;
+  min-width: 300px;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transform: translateY(50%);
+}
+
+.card-back {
+  transform: rotateY(180deg) translateY(50%);
+  overflow: hidden;
+}
+
+.inner-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff534;
+  border-radius: 10px;
+  color: #0b0c0e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Elements */
+img, video {
+  max-width: 100%;
+  max-height: 60%;
+  object-fit: contain;
+}
+
+#birthdayAudio {
+  display: none;
+}
+
+/* Confetti Animation */
+#confettiContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f2d74e;
+  left: 50%;
+  top: -10px;
+  animation: confetti 5s ease-in-out -2s infinite;
+  transform-origin: left top;
+}
+
+@keyframes confetti {
+  0% { transform: rotateZ(15deg) rotateY(0deg) translate(0, 0); }
+  25% { transform: rotateZ(5deg) rotateY(360deg) translate(-5vw, 20vh); }
+  50% { transform: rotateZ(15deg) rotateY(720deg) translate(5vw, 60vh); }
+  75% { transform: rotateZ(5deg) rotateY(1080deg) translate(-10vw, 80vh); }
+  100% { transform: rotateZ(15deg) rotateY(1440deg) translate(10vw, 110vh); }
+}
