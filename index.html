@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Your Eyes Only</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: "Roboto", Helvetica, Arial, sans-serif;
+      background-color: #0A2342;
+      display: flex;
+      justify-content: center;
+      overflow-x: hidden;
+      /* align-items: center; */
+    }
+
+    body {
+      height: 100vh;
+      text-align: center;
+      /* overflow: hidden; */
+      padding: 40px 20px;
+      width: 100%;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    #confettiContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #content {
+      max-width: 800px;
+      width: 100%;
+      padding: 20px;
+      overflow-x: hidden;
+      /* background-color: #fff534; */
+      /* border-radius: 10px; */
+      /* color: #0b0c0e; */
+      /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    }
+
+    #initialContent {
+      background-color: #fff;
+      border-radius: 10px;
+      color: #0b0c0e;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px 40px;
+      align-self: center;
+      max-width: 700px;
+      transition: all 0.3s ease-in-out;
+      opacity: 1;
+    }
+
+    #initialContent.hide {
+      transform: translateY(-150%);
+      opacity: 0;
+    }
+
+    #initialContent h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-top: 20px;
+      font-style: italic;
+      color: black;
+    }
+
+    #initialContent p {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    button {
+      background-color: #0b0c0e;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 1.2rem;
+      margin: 10px 0;
+      cursor: pointer;
+      border-radius: 5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background-color: blue;
+    }
+
+    #birthdayContent {
+      display: none;
+      transition: all 0.3s ease-in-out;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    .holt-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff534;
+      position: relative;
+    }
+
+    #birthdayMessage {
+      width: 100%;
+      position: relative;
+      /* margin-bottom: 20px; */
+      overflow: hidden;
+      /* position: relative; */
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      z-index: 1;
+    }
+
+    #birthdayMessage span {
+      display: block;
+      width: fit-content;
+      font-weight: 800;
+      font-style: italic;
+      text-transform: uppercase;
+      transform: rotate(-5deg);
+      white-space: nowrap;
+      color: #0b0c0e;
+    }
+
+    #holtImage {
+      margin-top: -25%;
+      /* margin-top: 2vw; */
+      object-fit: contain;
+      z-index: 2;
+      display: block;
+    }
+
+    #openInstruction {
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 20px;
+      background-color: blue;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+
+    #openInstruction:hover {
+      background-color: #0b0c0e;
+    }
+
+    .card-container {
+      max-width: 640px;
+      width: 100%;
+      min-height: 300px;
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 640px;
+      position: relative;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+      transform: rotateY(5deg);
+    }
+
+    .card:hover #openInstruction {
+      background-color: #0b0c0e;
+    }
+
+    .card.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card.is-flipped:hover {
+      transform: rotateY(175deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: fit-content;
+      min-height: 300px;
+      min-width: 300px;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      transform: translateY(50%);
+    }
+
+    .card-back {
+      transform: rotateY(180deg) translateY(50%);
+      overflow: hidden;
+    }
+
+    .inner-card {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #fff534;
+      border-radius: 10px;
+      color: #0b0c0e;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    img,
+    video {
+      max-width: 100%;
+      max-height: 60%;
+      object-fit: contain;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f2d74e;
+      left: 50%;
+      top: -10px;
+      animation: confetti 5s ease-in-out -2s infinite;
+      transform-origin: left top;
+    }
+
+    .confetti:nth-child(1) {
+      background-color: #f2d74e;
+      left: 10%;
+      animation-delay: 0;
+    }
+
+    .confetti:nth-child(2) {
+      background-color: #95c3de;
+      left: 20%;
+      animation-delay: -5s;
+    }
+
+    .confetti:nth-child(3) {
+      background-color: #25f348;
+      left: 30%;
+      animation-delay: -3s;
+    }
+
+    .confetti:nth-child(4) {
+      background-color: #f2d74e;
+      left: 40%;
+      animation-delay: -2.5s;
+    }
+
+    .confetti:nth-child(5) {
+      background-color: #95c3de;
+      left: 50%;
+      animation-delay: -4s;
+    }
+
+    .confetti:nth-child(6) {
+      background-color: #ff9a91;
+      left: 60%;
+      animation-delay: -6s;
+    }
+
+    .confetti:nth-child(7) {
+      background-color: #ff60cf;
+      left: 70%;
+      animation-delay: -1.5s;
+    }
+
+    .confetti:nth-child(8) {
+      background-color: #95c3de;
+      left: 80%;
+      animation-delay: -2s;
+    }
+
+    .confetti:nth-child(9) {
+      background-color: #ff9a91;
+      left: 90%;
+      animation-delay: -3.5s;
+    }
+
+    #birthdayAudio {
+      display: none;
+    }
+
+    @keyframes confetti {
+      0% {
+        transform: rotateZ(15deg) rotateY(0deg) translate(0, 0);
+      }
+
+      25% {
+        transform: rotateZ(5deg) rotateY(360deg) translate(-5vw, 20vh);
+      }
+
+      50% {
+        transform: rotateZ(15deg) rotateY(720deg) translate(5vw, 60vh);
+      }
+
+      75% {
+        transform: rotateZ(5deg) rotateY(1080deg) translate(-10vw, 80vh);
+      }
+
+      100% {
+        transform: rotateZ(15deg) rotateY(1440deg) translate(10vw, 110vh);
+      }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- <div id="content"> -->
+  <div id="initialContent">
+    <h1>Attention!</h1>
+    <p>You are about to enter a zone of heightened auditory significance. Headphones are not optional. They are a
+      requirement.</p>
+    <button onclick="startExperience()">Proceed</button>
+  </div>
+  <div class="card-container" id="birthdayContent">
+    <div class="card" onclick="toggleCard()">
+      <div class="card-face card-front">
+        <div class="inner-card">
+          <div class="holt-container">
+            <div id="birthdayMessage">
+              here is a message
+            </div>
+            <img id="holtImage" src="/api/placeholder/300/200" alt="Captain Holt">
+            <audio id="birthdayAudio" controls>
+              <source src="./vid/happybirthday.wav" type="audio/wav">
+            </audio>
+            </audio>
+          </div>
+        </div>
+        <p id="openInstruction">Click to Commence gift unveiling procedure</p>
+      </div>
+      <div class="card-face card-back">
+        <div class="inner-card">
+          <video id="birthdayVideo" controls>
+            <source src="./vid/dddddavid.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p id="openInstruction">End celebratory footage viewing</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- </div> -->
+  <div id="confettiContainer"></div>
+
+  <script>
+    const confettiColors = ['#f2d74e', '#95c3de', '#25f348', '#ff9a91', '#ff60cf'];
+    let wasFullscreenAttempted = false;
+    let wasManuallyPaused = false;
+    let videoPlayTimeout;
+    let birthdayCheerPlayed = false;
+
+    const birthdayMessages = [
+      "<span>It's your birthday.</span><span>I'm ecstatic.</span>",
+      "<span>Birthday acknowledged.</span><span>Celebrate efficiently.</span>",
+      "<span>You've aged.</span><span>Well done.</span>",
+      "<span>Today you're older.</span><span>Fascinating.</span>",
+      "<span>One year older.</span><span>Good work.</span>",
+      "<span>It's your birthday.</span><span>I'm expressing joy.</span>",
+      "<span>Your age has incremented.</span><span>Noted.</span>",
+      "<span>Today marks your birth.</span><span>Proceed as normal.</span>",
+      "<span>Congratulations, David.</span><span>You've survived another year.</span>",
+      "<span>Your birth anniversary</span><span>has been duly recognized.</span>",
+      "<span>Happy Birthday.</span><span>That's an order.</span>"
+    ]
+
+    const holtImages = ['holt1', 'holt2', 'holt3', 'holt4', 'holt5', 'holt6'];
+
+    function toggleCard () {
+      const card = document.querySelector('.card');
+      const isFaceDown = card.classList.contains('is-flipped');
+      if (isFaceDown) {
+        clearTimeout(videoPlayTimeout);
+        loadBirthdayContent();
+        document.getElementById('birthdayVideo').pause();
+      } else {
+        document.getElementById('birthdayAudio').pause();
+        if (!wasFullscreenAttempted) {
+          videoPlayTimeout = setTimeout(() => {
+            wasFullscreenAttempted = true;
+            // make the video fullscreen
+            document.getElementById('birthdayVideo').requestFullscreen();
+            document.getElementById('birthdayVideo').play();
+          }, 700);
+        } else {
+          document.getElementById('birthdayVideo').play();
+        }
+      }
+      card.classList.toggle('is-flipped');
+    }
+
+    function startExperience () {
+      loadBirthdayContent();
+      document.getElementById('initialContent').classList.add('hide');
+      setTimeout(() => {
+        document.getElementById('initialContent').style.display = 'none';
+        document.getElementById('birthdayContent').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('birthdayContent').style.transform = 'translateY(0)';
+          document.getElementById('birthdayContent').style.opacity = 1;
+        }, 300);
+        document.getElementById('birthdayAudio').play();
+        createConfetti();
+        resizeText();
+      }, 300);
+    }
+
+    function createConfetti () {
+      const confettiContainer = document.getElementById('confettiContainer');
+      for (let i = 0; i < 20; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 5 + 's';
+        confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        confettiContainer.appendChild(confetti);
+      }
+    }
+
+    function getRandomMessage () {
+      const randomIndex = Math.floor(Math.random() * birthdayMessages.length);
+      return birthdayMessages[randomIndex];
+    }
+
+    function getRandomHoltImage () {
+      const randomIndex = Math.floor(Math.random() * holtImages.length);
+      return holtImages[randomIndex];
+    }
+
+    function loadBirthdayMessage () {
+      const birthdayMessage = document.getElementById('birthdayMessage');
+      birthdayMessage.innerHTML = getRandomMessage();
+      resizeText();
+    }
+
+    function loadHoltImage () {
+      const holtImage = document.getElementById('holtImage');
+      holtImage.src = `/holt/${getRandomHoltImage()}.png`;
+    }
+
+    function loadBirthdayContent () {
+      loadBirthdayMessage();
+      loadHoltImage();
+      resizeText();
+    }
+
+    function resizeText () {
+      // const birthdayMessage = document.getElementById('birthdayMessage');
+      // const openInstruction = document.getElementById('openInstruction');
+      // const holtImage = document.getElementById('holtImage');
+      // const fontSize = Math.min(birthdayMessage.offsetWidth / 20, 20);
+      // birthdayMessage.style.fontSize = fontSize + 'px';
+      // openInstruction.style.fontSize = fontSize + 'px';
+      // holtImage.style.maxHeight = birthdayMessage.offsetHeight + 'px';
+      const container = document.getElementById('birthdayMessage');
+      const containerWidth = container.clientWidth;
+      const textWrappers = container.querySelectorAll('span');
+      textWrappers.forEach(textWrapper => {
+        let fontSize = 70;
+        textWrapper.style.fontSize = fontSize + 'px';
+        while (textWrapper.offsetWidth > containerWidth * 0.9 && fontSize > 10) {
+          fontSize -= 1;
+          textWrapper.style.fontSize = fontSize + 'px';
+        }
+      });
+    }
+
+    window.addEventListener('load', resizeText);
+    window.addEventListener('resize', resizeText);
+
+    // make clicks on video pause the video and not propagate to the card
+    document.getElementById('birthdayVideo').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (wasManuallyPaused) {
+        document.getElementById('birthdayVideo').play();
+        wasManuallyPaused = false;
+      } else {
+        document.getElementById('birthdayVideo').pause();
+        wasManuallyPaused = true;
+      }
+    });
+
+  </script>
+</body>
+
+</html>
